@@ -21,7 +21,8 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
+@import "~@/assets/style/helper.scss";
 nav {
   display: flex;
   box-shadow: 0 0 3px rgba(0, 0, 0, 0.25);
@@ -35,13 +36,13 @@ nav {
     align-items: center;
     padding: 2px 0;
 
-    .icon {
+    ::v-deep .icon {
       width: 30px;
       height: 30px;
     }
   }
   > .item.selected {
-    color: red;
+    color: $color-highlight;
   }
 }
 </style>
