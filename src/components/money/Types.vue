@@ -8,25 +8,19 @@ import Types from '@/components/money/Types.vue';
   </div>
 </template>
 
-<script lang="js">
-export default {
-  name: "Types",
-  data(){
-    return {
-      type: '-'
+<script lang="ts">
+import Vue from "vue";
+import { Component } from "vue-property-decorator";
+@Component
+export default class Types extends Vue {
+  type = "-";
+  selectType(type: string) {
+    if (type !== "-" && type !== "+") {
+      throw new Error("type is unknown");
     }
-  },
-  props: ['xxx'],
-  mounted(){
-    console.log(this.xxx)
-  },
-  methods:{
-    selectType(type){
-      this.type = type
-      return undefined
-    }
+    this.type = type;
   }
-};
+}
 </script>
 
 <style lang="scss" scoped>
