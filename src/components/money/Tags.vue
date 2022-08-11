@@ -8,6 +8,18 @@
       <li>食</li>
       <li>住</li>
       <li>行</li>
+      <li>衣</li>
+      <li>食</li>
+      <li>住</li>
+      <li>行</li>
+      <li>衣</li>
+      <li>食</li>
+      <li>住</li>
+      <li>行</li>
+      <li>衣</li>
+      <li>食</li>
+      <li>住</li>
+      <li>行</li>
     </ul>
   </div>
 </template>
@@ -20,7 +32,6 @@ export default {
 
 <style lang="scss" scoped>
 .tags {
-  border: 1px solid red;
   font-size: 14px;
   padding: 16px;
   display: flex;
