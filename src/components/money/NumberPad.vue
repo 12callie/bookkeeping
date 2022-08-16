@@ -46,6 +46,7 @@ export default class NumberPad extends Vue {
       return;
     }
     this.output += input;
+    this.output = this.output.replace(/^(\-)*(\d+)\.(\d\d).*$/, "$1$2.$3");
   }
   clear() {
     this.output = "0";

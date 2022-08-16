@@ -16,6 +16,7 @@ module.exports = {
     "no-debugger": process.env.NODE_ENV === "production" ? "warn" : "off",
     "@typescript-eslint/no-var-requires": 0,
     "@typescript-eslint/no-inferrable-types": "off",
+    "no-useless-escape": 0,
   },
   globals: {
     __WebpackModuleApi: true,
