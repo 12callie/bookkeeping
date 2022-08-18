@@ -15,11 +15,13 @@ import Types from "@/components/money/Types.vue";
 import NumberPad from "@/components/money/NumberPad.vue";
 
 import { Component, Watch } from "vue-property-decorator";
+
 type Record = {
   tags: string[];
   notes: string;
   type: string;
   amount: string;
+  createdAt?: Date;
 };
 @Component({
   components: { Notes, Types, NumberPad, Tags },
@@ -32,7 +34,9 @@ export default class Money extends Vue {
     type: "-",
     amount: "0",
   };
-  recordList: Record[] = [];
+  recordList: Record[] = JSON.parse(
+    window.localStorage.getItem("recordList") || "[]"
+  );
   onUpdateTag(value: string[]) {
     this.record.tags = value;
   }
@@ -48,9 +52,9 @@ export default class Money extends Vue {
       alert("请输入金额");
       return;
     }
-    const record2 = JSON.parse(JSON.stringify(this.record));
+    const record2: Record = JSON.parse(JSON.stringify(this.record));
+    record2.createdAt = new Date();
     this.recordList.push(record2);
-    console.log(record2);
   }
   @Watch("recordList")
   onRecordListChange() {
