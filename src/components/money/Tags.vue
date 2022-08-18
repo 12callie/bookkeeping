@@ -7,8 +7,8 @@
       <li
         v-for="tag in dataSource"
         :key="tag"
-        :class="{ selected: selectedTags.indexOf(tag) >= 0 }"
-        @click="toggle(tag)"
+        :class="{ selected: selectedTag.indexOf(tag) >= 0 }"
+        @click="select(tag)"
       >
         {{ tag }}
       </li>
@@ -22,14 +22,14 @@ import { Component, Prop } from "vue-property-decorator";
 @Component
 export default class Tags extends Vue {
   @Prop() readonly dataSource: string[] | undefined;
-  selectedTags: string[] = [];
-  toggle(tag: string) {
-    const index = this.selectedTags.indexOf(tag);
-    if (index >= 0) {
-      this.selectedTags.splice(index, 1);
-    } else {
-      this.selectedTags.push(tag);
+  selectedTag: string[] = [];
+
+  select(tag: string) {
+    if (this.selectedTag.length > 0) {
+      this.selectedTag = [];
     }
+    this.selectedTag.push(tag);
+    this.$emit("update:value", this.selectedTag);
   }
   createTags() {
     const tagName = window.prompt("请输入标签名");
@@ -39,7 +39,7 @@ export default class Tags extends Vue {
     }
     if (this.dataSource) {
       if (this.dataSource.indexOf(tagName!) >= 0) {
-        alert(`${tagName}已存在`);
+        alert(`此标签已存在`);
       } else {
         this.$emit("update:dataSource", [...this.dataSource, tagName]);
       }
