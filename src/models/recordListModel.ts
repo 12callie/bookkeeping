@@ -1,5 +1,5 @@
 const localStorageKeyName = "recordList";
-const model = {
+const recordListModel = {
   //获取数据
   fetch() {
     return JSON.parse(window.localStorage.getItem(localStorageKeyName) || "[]") as RecordItem[];
@@ -12,4 +12,4 @@ const model = {
     return JSON.parse(JSON.stringify(data))
   }
 };
-export { model };
+export { recordListModel };

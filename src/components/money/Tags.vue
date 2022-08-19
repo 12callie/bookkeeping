@@ -36,6 +36,7 @@ export default class Tags extends Vue {
 
     if (tagName === "") {
       alert("标签名不能为空");
+      return;
     }
     if (this.dataSource) {
       if (this.dataSource.indexOf(tagName!) >= 0) {
