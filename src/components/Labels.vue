@@ -22,6 +22,9 @@ export default class Labels extends Vue {
   tags = tagListModel.data;
   createTag() {
     const tagName = window.prompt("请输入标签名");
+    if (tagName === "") {
+      alert("标签名不能为空");
+    }
     if (tagName) {
       const message = tagListModel.create(tagName);
       if (message === "duplicate") {
@@ -29,9 +32,8 @@ export default class Labels extends Vue {
       } else {
         alert("创建成功");
       }
-    } else {
-      alert("标签名不能为空");
     }
+    return;
   }
 }
 </script>

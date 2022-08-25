@@ -16,7 +16,7 @@ const tagListModel: TagListModel = {
   },
   create(name) {
     if(this.data.indexOf(name)>=0){
-      return 'duplicate'
+      return 'duplicate';
     }else{
       this.data.push(name);
       this.save();
