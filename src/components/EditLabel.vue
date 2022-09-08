@@ -8,12 +8,13 @@
     <div class="form-wrapper">
       <FormItem
         :value="tag.name"
+        @update:value="update"
         field-name="标签名"
         placeholder="请输入标签名"
       />
     </div>
-    <div class="deleteTag-wrapper">
-      <DButton class="deleteTag">删除标签</DButton>
+    <div class="button-wrapper">
+      <DButton @click.native="remove">删除标签</DButton>
     </div>
   </Layout>
 </template>
@@ -39,6 +40,22 @@ export default class EditLabel extends Vue {
       this.tag = tag;
     } else {
       this.$router.replace("/404");
+    }
+  }
+  update(name: string) {
+    if (this.tag) {
+      tagListModel.update(this.tag.id, name);
+    }
+  }
+  remove() {
+    if (this.tag) {
+      if (window.confirm("确定删除此标签吗？")) {
+        if (tagListModel.remove(this.tag.id)) {
+          this.$router.back();
+        } else {
+          window.alert("删除失败");
+        }
+      }
     }
   }
 }
@@ -67,7 +84,7 @@ export default class EditLabel extends Vue {
   font-size: 16px;
 }
 
-.deleteTag-wrapper {
+.button-wrapper {
   text-align: center;
   margin-top: 44px;
 }
