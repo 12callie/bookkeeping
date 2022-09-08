@@ -68,5 +68,6 @@ export default class Money extends Vue {
 }
 .form-wrapper {
   padding: 10px 0;
+  font-size: 14px;
 }
 </style>
