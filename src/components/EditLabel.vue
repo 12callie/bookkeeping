@@ -6,7 +6,11 @@
       <span class="span-right"></span>
     </div>
     <div class="form-wrapper">
-      <FormItem :value="value" field-name="标签名" placeholder="请输入标签名" />
+      <FormItem
+        :value="tag.name"
+        field-name="标签名"
+        placeholder="请输入标签名"
+      />
     </div>
     <div class="deleteTag-wrapper">
       <DButton class="deleteTag">删除标签</DButton>
@@ -25,14 +29,14 @@ import DButton from "@/components/DButton.vue";
   components: { FormItem, DButton },
 })
 export default class EditLabel extends Vue {
-  value: string = "";
+  tag?: { id: string; name: string } = undefined;
   created() {
     const id = this.$route.params.id;
     tagListModel.fetch();
     const tags = tagListModel.data;
     const tag = tags.filter((tag) => tag.id === id)[0];
     if (tag) {
-      this.value = tag.name;
+      this.tag = tag;
     } else {
       this.$router.replace("/404");
     }
