@@ -42,7 +42,7 @@ const tagListModel: TagListModel = {
         return 'duplicate'
       }else{
         const tag = this.data.filter(item => item.id === id)[0]
-        tag.name = name
+        tag.id = tag.name = name
         this.save()
         return 'success'
       }

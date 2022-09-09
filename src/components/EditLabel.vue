@@ -1,7 +1,7 @@
 <template>
   <Layout>
     <div class="navBar">
-      <Icon class="icon-left" name="left"></Icon>
+      <Icon class="icon-left" name="left" @click.native="goBack"></Icon>
       <span class="title">编辑标签</span>
       <span class="span-right"></span>
     </div>
@@ -57,6 +57,9 @@ export default class EditLabel extends Vue {
         }
       }
     }
+  }
+  goBack() {
+    this.$router.back();
   }
 }
 </script>
