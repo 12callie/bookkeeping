@@ -29,9 +29,7 @@ const tagListModel: TagListModel = {
       return 'duplicate';
     } else {
       const id = createId().toString();
-      console.log(id);
       this.data.push({ id, name: name });
-      window.localStorage.setItem('_idMax', id);
       this.save();
       return 'success';
     }
