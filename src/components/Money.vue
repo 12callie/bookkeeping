@@ -1,5 +1,6 @@
 <template>
   <Layout class-prefix="layout">
+    {{ recordList }}
     <NumberPad @update:value="onUpdateAmount" @submit="saveRecord" />
     <Types :value.sync="record.type" />
     <div class="form-wrapper">
@@ -23,18 +24,21 @@ import { recordListModel } from "@/models/recordListModel";
 import { tagListModel } from "@/models/tagListModel";
 import { Component, Watch } from "vue-property-decorator";
 
+const tagList = tagListModel.fetch();
+const recordList = recordListModel.fetch();
+
 @Component({
   components: { FormItem, Types, NumberPad, Tags },
 })
 export default class Money extends Vue {
-  tags = tagListModel.data;
+  tags = tagList;
   record: RecordItem = {
     tags: [],
     notes: "",
     type: "-",
     amount: "0",
   };
-  recordList = recordListModel.fetch();
+  recordList: RecordItem[] = recordList;
   onUpdateTag(value: string[]) {
     this.record.tags = value;
   }
@@ -50,13 +54,11 @@ export default class Money extends Vue {
       alert("请输入金额");
       return;
     }
-    const record2: RecordItem = recordListModel.clone(this.record);
-    record2.createdAt = new Date();
-    this.recordList.push(record2);
+    recordListModel.create(this.record);
   }
   @Watch("recordList")
   onRecordListChange() {
-    recordListModel.save(this.recordList);
+    recordListModel.save();
   }
 }
 </script>

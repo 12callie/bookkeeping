@@ -12,7 +12,7 @@
       </router-link>
     </div>
     <div class="createTag-wrapper">
-      <DButton class="createTag"  @click.native="createTag">新建标签</DButton>
+      <DButton class="createTag" @click.native="createTag">新建标签</DButton>
     </div>
   </Layout>
 </template>
@@ -24,7 +24,7 @@ import { tagListModel } from "@/models/tagListModel";
 import DButton from "@/components/DButton.vue";
 tagListModel.fetch();
 @Component({
-  components: {DButton}
+  components: { DButton },
 })
 export default class Labels extends Vue {
   tags = tagListModel.data;
@@ -65,10 +65,10 @@ export default class Labels extends Vue {
     }
   }
 }
-.createTag{
-    &-wrapper {
-      text-align: center;
-      margin-top: 44px;
-    }
+.createTag {
+  &-wrapper {
+    text-align: center;
+    margin-top: 44px;
   }
+}
 </style>
