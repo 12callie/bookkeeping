@@ -1,6 +1,5 @@
 <template>
   <Layout class-prefix="layout">
-    {{ recordList }}
     <NumberPad @update:value="onUpdateAmount" @submit="saveRecord" />
     <Types :value.sync="record.type" />
     <div class="form-wrapper">
@@ -24,14 +23,13 @@ import { recordListModel } from "@/models/recordListModel";
 import { tagListModel } from "@/models/tagListModel";
 import { Component, Watch } from "vue-property-decorator";
 
-const tagList = tagListModel.fetch();
 const recordList = recordListModel.fetch();
 
 @Component({
   components: { FormItem, Types, NumberPad, Tags },
 })
 export default class Money extends Vue {
-  tags = tagList;
+  tags = window.tagList;
   record: RecordItem = {
     tags: [],
     notes: "",
