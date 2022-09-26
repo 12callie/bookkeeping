@@ -20,7 +20,6 @@ import FormItem from "@/components/money/FormItem.vue";
 import Types from "@/components/money/Types.vue";
 import NumberPad from "@/components/money/NumberPad.vue";
 import { recordListModel } from "@/models/recordListModel";
-import { tagListModel } from "@/models/tagListModel";
 import { Component, Watch } from "vue-property-decorator";
 
 const recordList = recordListModel.fetch();

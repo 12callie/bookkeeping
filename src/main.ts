@@ -24,6 +24,17 @@ window.createTag = (name) => {
   }
   return;
 };
+window.removeTag = (id: string) => {
+  if (window.confirm("确定删除此标签吗？")) {
+    return tagListModel.remove(id);
+  }
+};
+window.updateTag = (id: string, name: string) => {
+  return tagListModel.update(id, name);
+};
+window.findTag = (id: string) => {
+  return window.tagList.filter((tag) => tag.id === id)[0];
+};
 
 new Vue({
   router,
