@@ -33,14 +33,8 @@ export default class Labels extends Vue {
       alert("标签名不能为空");
     }
     if (tagName) {
-      const message = tagListModel.create(tagName);
-      if (message === "duplicate") {
-        alert("标签名已存在");
-      } else {
-        alert("创建成功");
-      }
+      window.createTag(tagName);
     }
-    return;
   }
 }
 </script>
