@@ -19,10 +19,7 @@ import Tags from "@/components/money/Tags.vue";
 import FormItem from "@/components/money/FormItem.vue";
 import Types from "@/components/money/Types.vue";
 import NumberPad from "@/components/money/NumberPad.vue";
-import { recordListModel } from "@/models/recordListModel";
-import { Component, Watch } from "vue-property-decorator";
-
-const recordList = recordListModel.fetch();
+import { Component } from "vue-property-decorator";
 
 @Component({
   components: { FormItem, Types, NumberPad, Tags },
@@ -35,7 +32,7 @@ export default class Money extends Vue {
     type: "-",
     amount: "0",
   };
-  recordList: RecordItem[] = recordList;
+  recordList = window.recordList;
   onUpdateTag(value: string[]) {
     this.record.tags = value;
   }
@@ -51,11 +48,7 @@ export default class Money extends Vue {
       alert("请输入金额");
       return;
     }
-    recordListModel.create(this.record);
-  }
-  @Watch("recordList")
-  onRecordListChange() {
-    recordListModel.save();
+    window.createRecord(this.record);
   }
 }
 </script>
