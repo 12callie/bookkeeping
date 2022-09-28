@@ -20,19 +20,20 @@ import FormItem from "@/components/money/FormItem.vue";
 import Types from "@/components/money/Types.vue";
 import NumberPad from "@/components/money/NumberPad.vue";
 import { Component } from "vue-property-decorator";
+import store from "@/store/index2";
 
 @Component({
   components: { FormItem, Types, NumberPad, Tags },
 })
 export default class Money extends Vue {
-  tags = window.tagList;
+  tags = store.tagList;
   record: RecordItem = {
     tags: [],
     notes: "",
     type: "-",
     amount: "0",
   };
-  recordList = window.recordList;
+  recordList = store.recordList;
   onUpdateTag(value: string[]) {
     this.record.tags = value;
   }
@@ -48,7 +49,7 @@ export default class Money extends Vue {
       alert("请输入金额");
       return;
     }
-    window.createRecord(this.record);
+    store.createRecord(this.record);
   }
 }
 </script>
