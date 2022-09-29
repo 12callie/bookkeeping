@@ -5,7 +5,7 @@
     </div>
     <ul class="current">
       <li
-        v-for="tag in dataSource"
+        v-for="tag in tagList"
         :key="tag.id"
         :class="{ selected: selectedTag.indexOf(tag) >= 0 }"
         @click="select(tag)"
@@ -17,14 +17,15 @@
 </template>
 
 <script lang="ts">
+import store from "@/store/index2";
 import Vue from "vue";
-import { Component, Prop } from "vue-property-decorator";
+import { Component } from "vue-property-decorator";
 @Component
 export default class Tags extends Vue {
-  @Prop() readonly dataSource: string[] | undefined;
-  selectedTag: string[] = [];
+  selectedTag: Tag[] = [];
+  tagList = store.tagList;
 
-  select(tag: string) {
+  select(tag: Tag) {
     if (this.selectedTag.length > 0) {
       this.selectedTag = [];
     }
@@ -33,20 +34,12 @@ export default class Tags extends Vue {
   }
   createTags() {
     const tagName = window.prompt("请输入标签名");
-
     if (tagName === "") {
-      alert("标签名不能为空");
-      return;
+      return alert("标签名不能为空");
     } else if (tagName === null) {
       return;
     }
-    if (this.dataSource) {
-      if (this.dataSource.indexOf(tagName!) >= 0) {
-        alert(`此标签已存在`);
-      } else {
-        this.$emit("update:dataSource", [...this.dataSource, tagName]);
-      }
-    }
+    store.createTag(tagName);
   }
 }
 </script>
