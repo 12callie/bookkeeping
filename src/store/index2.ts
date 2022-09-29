@@ -4,5 +4,5 @@ const store = {
     ...tagStore,
     ...recordStore,
 };
-
+console.log(store);
 export default store;
