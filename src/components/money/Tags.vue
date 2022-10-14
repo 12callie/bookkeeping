@@ -17,13 +17,13 @@
 </template>
 
 <script lang="ts">
-import store from "@/store/index2";
+import oldStore from "@/store/index2";
 import Vue from "vue";
 import { Component } from "vue-property-decorator";
 @Component
 export default class Tags extends Vue {
   selectedTag: Tag[] = [];
-  tagList = store.tagList;
+  tagList = oldStore.tagList;
 
   select(tag: Tag) {
     if (this.selectedTag.length > 0) {
@@ -39,7 +39,7 @@ export default class Tags extends Vue {
     } else if (tagName === null) {
       return;
     }
-    store.createTag(tagName);
+    oldStore.createTag(tagName);
   }
 }
 </script>

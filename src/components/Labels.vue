@@ -21,19 +21,19 @@
 import Vue from "vue";
 import { Component } from "vue-property-decorator";
 import DButton from "@/components/DButton.vue";
-import store from "@/store/index2";
+import oldStore from "@/store/index2";
 @Component({
   components: { DButton },
 })
 export default class Labels extends Vue {
-  tags = store.tagList;
+  tags = oldStore.tagList;
   createTag() {
     const tagName = window.prompt("请输入标签名");
     if (tagName === "") {
       alert("标签名不能为空");
     }
     if (tagName) {
-      store.createTag(tagName);
+      oldStore.createTag(tagName);
     }
   }
 }
