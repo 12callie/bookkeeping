@@ -18,27 +18,18 @@
 </template>
 
 <script lang="ts">
-import Vue from "vue";
-import { Component } from "vue-property-decorator";
+import { Component, Mixins } from "vue-property-decorator";
 import DButton from "@/components/DButton.vue";
+import TagHelper from "@/mixins/TagHelper";
 @Component({
   components: { DButton },
 })
-export default class Labels extends Vue {
+export default class Labels extends Mixins(TagHelper) {
   get tags() {
     return this.$store.state.tagList;
   }
   created() {
     this.$store.commit("fetchTags");
-  }
-  createTag() {
-    const tagName = window.prompt("请输入标签名");
-    if (tagName === "") {
-      return alert("标签名不能为空");
-    } else if (tagName === null) {
-      return;
-    }
-    this.$store.commit("createTag", tagName);
   }
 }
 </script>
