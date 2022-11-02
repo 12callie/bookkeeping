@@ -10,20 +10,44 @@
       classPrefix="interval"
       :value.sync="interval"
     />
-    <div>
-      <ol>
-        <li v-for="(group, index) in result" :key="index">
-          <h3>{{ group.title }}</h3>
-          <ol>
-            <li v-for="item in group.items" :key="item.id">
-              {{ item.amount }}
-            </li>
-          </ol>
-        </li>
-      </ol>
-    </div>
+    <ol>
+      <li v-for="(group, index) in result" :key="index">
+        <h3 class="title">{{ group.title }}</h3>
+        <ol>
+          <li v-for="item in group.items" :key="item.id" class="record">
+            <span>{{ tagName(item.tags) }}</span>
+            <span class="notes">{{ item.notes }}</span>
+            <span>￥{{ item.amount }}</span>
+          </li>
+        </ol>
+      </li>
+    </ol>
   </Layout>
 </template>
+<style lang="scss" scoped>
+%item {
+  line-height: 24px;
+  padding: 8px 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.title {
+  @extend %item;
+}
+.record {
+  @extend %item;
+  background: #fff;
+  .notes {
+    color: #999999;
+    margin-right: auto;
+    margin-left: 12px;
+    flex-wrap: wrap;
+  }
+}
+</style>
+
+
 
 <script lang="ts">
 import Vue from "vue";
@@ -51,6 +75,9 @@ export default class Statistics extends Vue {
   }
   beforeCreate() {
     this.$store.commit("fetchRecords");
+  }
+  tagName(tags: Tag[]) {
+    return tags.length === 0 ? "空" : tags[0].name;
   }
   type = "-";
   interval = "day";
