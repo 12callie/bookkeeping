@@ -11,8 +11,8 @@
       :value.sync="interval"
     />
     <ol>
-      <li v-for="(group, index) in result" :key="index">
-        <h3 class="title">{{ group.title }}</h3>
+      <li v-for="(group, index) in groupList" :key="index">
+        <h3 class="title">{{ beautify(group.title) }}</h3>
         <ol>
           <li v-for="item in group.items" :key="item.id" class="record">
             <span>{{ tagName(item.tags) }}</span>
@@ -24,30 +24,6 @@
     </ol>
   </Layout>
 </template>
-<style lang="scss" scoped>
-%item {
-  line-height: 24px;
-  padding: 8px 16px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-.title {
-  @extend %item;
-}
-.record {
-  @extend %item;
-  background: #fff;
-  .notes {
-    color: #999999;
-    margin-right: auto;
-    margin-left: 12px;
-    flex-wrap: wrap;
-  }
-}
-</style>
-
-
 
 <script lang="ts">
 import Vue from "vue";
@@ -55,6 +31,9 @@ import { Component } from "vue-property-decorator";
 import Tabs from "@/components/Tabs.vue";
 import recordTypeList from "@/constants/recordTypeList";
 import intervalList from "@/constants/interval";
+import dayjs from "dayjs";
+import clone from "@/lib/clone";
+
 @Component({
   components: { Tabs },
 })
@@ -62,16 +41,45 @@ export default class Statistics extends Vue {
   get recordList() {
     return (this.$store.state as RootState).recordList;
   }
-  get result() {
-    type HashTableValue = { title: string; items: RecordItem[] };
+  get groupList() {
     const { recordList } = this;
-    const hashTable: { [key: string]: HashTableValue } = {};
-    for (let i = 0; i < recordList.length; i++) {
-      const [date, time] = recordList[i].createdAt!.split("T");
-      hashTable[date] = hashTable[date] || { title: date, items: [] };
-      hashTable[date].items.push(recordList[i]);
+    if (recordList.length === 0) {
+      return [];
     }
-    return hashTable;
+    const newList = clone(recordList);
+    newList.sort(
+      (a, b) => dayjs(b.createdAt).valueOf() - dayjs(a.createdAt).valueOf() //把数据按照从大到小进行排序（sort 会改变原数组）
+    );
+    const result = [{ title: newList[0].createdAt, items: [newList[0]] }]; //把第一项放进去
+    for (let i = 1; i < newList.length; i++) {
+      if (
+        dayjs(newList[i].createdAt).isSame(
+          dayjs(result[result.length - 1].title),
+          "day"
+        ) //拿循环的当前项和 result 的最后一项比较，若是同一天，就放进同一个对象中
+      ) {
+        result[result.length - 1].items.push(newList[i]);
+      } else {
+        //不是同一天，就另起一个头
+        result.push({ title: newList[i].createdAt, items: [newList[i]] });
+      }
+    }
+    return result;
+  }
+  beautify(string: string) {
+    const now = dayjs();
+    const day = dayjs(string);
+    if (now.isSame(day, "day")) {
+      return "今天";
+    } else if (now.subtract(1, "day").isSame(day, "day")) {
+      return "昨天";
+    } else if (now.subtract(2, "day").isSame(day, "day")) {
+      return "前天";
+    } else if (now.isSame(day, "years")) {
+      return dayjs(string).format("M月D日");
+    } else {
+      return dayjs(string).format("YYYY年M月D日");
+    }
   }
   beforeCreate() {
     this.$store.commit("fetchRecords");
@@ -101,5 +109,25 @@ export default class Statistics extends Vue {
     height: 48px;
   }
 }
-</style>
 
+%item {
+  line-height: 24px;
+  padding: 8px 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.title {
+  @extend %item;
+}
+.record {
+  @extend %item;
+  background: #fff;
+  .notes {
+    color: #999999;
+    margin-right: auto;
+    margin-left: 12px;
+    flex-wrap: wrap;
+  }
+}
+</style>
