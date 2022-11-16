@@ -5,14 +5,13 @@
       classPrefix="types"
       :value.sync="type"
     />
-    <Tabs
-      :data-source="intervalList"
-      classPrefix="interval"
-      :value.sync="interval"
-    />
     <ol>
       <li v-for="(group, index) in groupList" :key="index">
-        <h3 class="title">{{ beautify(group.title) }}</h3>
+        <h3 class="title">
+          {{ beautify(group.title) }}
+          <span>￥{{ group.total }}</span>
+        </h3>
+
         <ol>
           <li v-for="item in group.items" :key="item.id" class="record">
             <span>{{ tagName(item.tags) }}</span>
@@ -30,7 +29,6 @@ import Vue from "vue";
 import { Component } from "vue-property-decorator";
 import Tabs from "@/components/Tabs.vue";
 import recordTypeList from "@/constants/recordTypeList";
-import intervalList from "@/constants/interval";
 import dayjs from "dayjs";
 import clone from "@/lib/clone";
 
@@ -38,6 +36,8 @@ import clone from "@/lib/clone";
   components: { Tabs },
 })
 export default class Statistics extends Vue {
+  type = "-";
+  recordTypeList = recordTypeList;
   get recordList() {
     return (this.$store.state as RootState).recordList;
   }
@@ -46,26 +46,42 @@ export default class Statistics extends Vue {
     if (recordList.length === 0) {
       return [];
     }
-    const newList = clone(recordList);
-    newList.sort(
-      (a, b) => dayjs(b.createdAt).valueOf() - dayjs(a.createdAt).valueOf() //把数据按照从大到小进行排序（sort 会改变原数组）
-    );
-    const result = [{ title: newList[0].createdAt, items: [newList[0]] }]; //把第一项放进去
+    const newList = clone(recordList)
+      .filter((r) => r.type === this.type)
+      .sort(
+        (a, b) => dayjs(b.createdAt).valueOf() - dayjs(a.createdAt).valueOf()
+      );
+    type Result = { title: string; total?: number; items: RecordItem[] }[];
+    const result: Result = [
+      {
+        title: dayjs(newList[0].createdAt).format("YYYY-MM-DD"),
+        items: [newList[0]],
+      },
+    ];
     for (let i = 1; i < newList.length; i++) {
       if (
         dayjs(newList[i].createdAt).isSame(
           dayjs(result[result.length - 1].title),
           "day"
-        ) //拿循环的当前项和 result 的最后一项比较，若是同一天，就放进同一个对象中
+        )
       ) {
         result[result.length - 1].items.push(newList[i]);
       } else {
-        //不是同一天，就另起一个头
-        result.push({ title: newList[i].createdAt, items: [newList[i]] });
+        result.push({
+          title: dayjs(newList[i].createdAt).format("YYYY-MM-DD"),
+          items: [newList[i]],
+        });
       }
     }
+    result.forEach((group) => {
+      group.total = group.items.reduce(
+        (sum, item) => sum + parseFloat(item.amount),
+        0
+      );
+    });
     return result;
   }
+
   beautify(string: string) {
     const now = dayjs();
     const day = dayjs(string);
@@ -87,10 +103,6 @@ export default class Statistics extends Vue {
   tagName(tags: Tag[]) {
     return tags.length === 0 ? "空" : tags[0].name;
   }
-  type = "-";
-  interval = "day";
-  recordTypeList = recordTypeList;
-  intervalList = intervalList;
 }
 </script>
 
