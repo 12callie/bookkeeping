@@ -49,9 +49,10 @@ export default class Money extends Vue {
     this.record.amount = parseFloat(value).toFixed(2);
   }
   saveRecord(value: string) {
-    if (parseFloat(value) === 0) {
-      alert("请输入金额");
-      return;
+    if (this.record.tags.length === 0) {
+      return window.alert("请选择标签");
+    } else if (parseFloat(value) === 0) {
+      return window.alert("请输入金额");
     }
     this.$store.commit("createRecord", this.record);
   }
