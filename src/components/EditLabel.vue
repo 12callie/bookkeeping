@@ -46,6 +46,9 @@ export default class EditLabel extends Vue {
   }
 
   remove() {
+    if (this.$store.state.tagList.length < 2) {
+      return window.alert("当前是最后一个标签，请先添加标签再删除");
+    }
     if (this.tag) {
       this.$store.commit("removeTag", this.tag.id);
     }

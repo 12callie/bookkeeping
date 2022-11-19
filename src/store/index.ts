@@ -12,7 +12,7 @@ const store = new Vuex.Store({
   state: {
     recordList: [],
     tagList: [],
-    currentTag: undefined
+    currentTag: undefined,
   } as RootState,
   mutations: {
     fetchRecords(state) {
@@ -30,7 +30,12 @@ const store = new Vuex.Store({
 
 
     fetchTags(state) {
-      state.tagList = JSON.parse(window.localStorage.getItem('tagList') || "[]");
+      const tags = [{ "id": "1", "name": "水果" }, { "id": "2", "name": "买菜" }, { "id": "3", "name": "衣服" }, { "id": "4", "name": "旅游" }, { "id": "5", "name": "请客" }, { "id": "6", "name": "吃饭" }, { "id": "7", "name": "1" }];
+      state.tagList = JSON.parse(window.localStorage.getItem('tagList') || '[]');
+      if (!state.tagList || state.tagList.length === 0) {
+        state.tagList = tags;
+        store.commit('saveTags');
+      }
     },
     saveTags(state) {
       window.localStorage.setItem('tagList', JSON.stringify(state.tagList));
@@ -40,7 +45,7 @@ const store = new Vuex.Store({
       if (names.indexOf(name) >= 0) {
         alert("标签名已存在");
       } else {
-        const id = createId().toString();
+        const id = createId(state.tagList);
         state.tagList.push({ id, name: name });
         store.commit('saveTags');
         alert("创建成功");

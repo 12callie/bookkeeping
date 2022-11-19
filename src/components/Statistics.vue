@@ -5,7 +5,7 @@
       classPrefix="types"
       :value.sync="type"
     />
-    <ol>
+    <ol v-if="groupList.length > 0">
       <li v-for="(group, index) in groupList" :key="index">
         <h3 class="title">
           {{ beautify(group.title) }}
@@ -20,6 +20,9 @@
           </li>
         </ol>
       </li>
+    </ol>
+    <ol v-else class="noResult">
+      <span>暂时还没有数据</span>
     </ol>
   </Layout>
 </template>
@@ -43,14 +46,14 @@ export default class Statistics extends Vue {
   }
   get groupList() {
     const { recordList } = this;
-    if (recordList.length === 0) {
-      return [];
-    }
     const newList = clone(recordList)
       .filter((r) => r.type === this.type)
       .sort(
         (a, b) => dayjs(b.createdAt).valueOf() - dayjs(a.createdAt).valueOf()
       );
+    if (newList.length === 0) {
+      return [];
+    }
     type Result = { title: string; total?: number; items: RecordItem[] }[];
     const result: Result = [
       {
@@ -141,5 +144,9 @@ export default class Statistics extends Vue {
     margin-left: 12px;
     flex-wrap: wrap;
   }
+}
+.noResult {
+  text-align: center;
+  margin-top: 64px;
 }
 </style>

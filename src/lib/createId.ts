@@ -1,7 +1,7 @@
-let id: number = parseInt(window.localStorage.getItem('_idMax') || '0') || 0;
-function createId() {
+function createId(tagList: Tag[]) {
+    let id = parseInt(tagList[tagList.length - 1].id);
     id++;
-    window.localStorage.setItem('_idMax', id.toString());
-    return id;
+    return id.toString();
 }
 export default createId;
+
