@@ -26,4 +26,7 @@ module.exports = {
       .use(require("svg-sprite-loader/plugin"), [{ plainSprite: true }]);
     config.module.rule("svg").exclude.add(dir); // 其他 svg loader 排除 icons 目录
   },
+  publicPath: process.env.NODE_ENV === 'production'
+    ? '/bookkeeping-website/'
+    : '/'
 };
